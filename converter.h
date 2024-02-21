@@ -1,14 +1,33 @@
-#ifndef CONVERTER_H
-#define CONVERTER_H
+#pragma once
 
-#include <QMainWindow>
+#include <QWidget>
+#include <QLabel>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QPushButton>
 
-class Converter : public QMainWindow
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+
+class Converter : public QWidget
 {
     Q_OBJECT
 
 public:
     Converter(QWidget *parent = nullptr);
     ~Converter();
+
+private:
+    QLineEdit* m_sumEdit;
+    QLineEdit* m_resultEdit;
+    QComboBox* m_currencyFrom;
+    QComboBox* m_currencyTo;
+    QPushButton* m_calculateButton;
+
+    QNetworkAccessManager m_networkManager;
+    QNetworkReply* m_reply = nullptr;
+private slots:
+    void parseData();
+    void searchCurrency();
+
 };
-#endif // CONVERTER_H
