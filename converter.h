@@ -23,11 +23,13 @@ private:
     QComboBox* m_currencyFrom;
     QComboBox* m_currencyTo;
     QPushButton* m_calculateButton;
+    QPushButton* m_swapCurrencyButton;
 
     QNetworkAccessManager m_networkManager;
     QNetworkReply* m_reply = nullptr;
+
 private slots:
     void parseData();
     void searchCurrency();
-
+    void swapCurrency();
 };

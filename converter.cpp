@@ -35,8 +35,8 @@ Converter::Converter(QWidget *parent)
     sumLayout->addWidget(m_sumEdit);
 
     QHBoxLayout* currencyLayout = new QHBoxLayout;
-    QLabel* currencyLabelFrom = new QLabel("Convert currency from", this);
-    QLabel* currencyLabelTo = new QLabel(" / to", this);
+    QLabel* currencyLabelFrom = new QLabel("Convert currency", this);
+    m_swapCurrencyButton = new QPushButton("Swap", this);
     m_currencyFrom = new QComboBox(this);
     m_currencyTo = new QComboBox(this);
 
@@ -52,7 +52,7 @@ Converter::Converter(QWidget *parent)
 
     currencyLayout->addWidget(currencyLabelFrom);
     currencyLayout->addWidget(m_currencyFrom);
-    currencyLayout->addWidget(currencyLabelTo);
+    currencyLayout->addWidget(m_swapCurrencyButton);
     currencyLayout->addWidget(m_currencyTo);
 
     QHBoxLayout* resultLayout = new QHBoxLayout;
@@ -75,6 +75,14 @@ Converter::Converter(QWidget *parent)
     mainLayout->addLayout(convertLayout);
 
     connect(m_calculateButton, SIGNAL(clicked()), this, SLOT(searchCurrency()));
+    connect(m_swapCurrencyButton, SIGNAL(clicked()), this, SLOT(swapCurrency()));
+}
+
+void Converter::swapCurrency()
+{
+    int indexCurrency = m_currencyFrom->currentIndex();
+    m_currencyFrom->setCurrentIndex(m_currencyTo->currentIndex());
+    m_currencyTo->setCurrentIndex(indexCurrency);
 }
 
 void Converter::searchCurrency()
