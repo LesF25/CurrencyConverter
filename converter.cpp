@@ -81,8 +81,6 @@ Converter::Converter(QWidget *parent)
     QFrame* line = new QFrame(this);
     line->setFrameShape(QFrame::HLine);
 
-
-
     mainLayout->addLayout(sumLayout);
     mainLayout->addLayout(currencyLayout);
     mainLayout->addLayout(resultLayout);
@@ -98,9 +96,9 @@ Converter::Converter(QWidget *parent)
 
 void Converter::initStyle()
 {
-    int id1 = QFontDatabase::addApplicationFont(":/resource/fonts/AR.otf");
-    QString family1 = QFontDatabase::applicationFontFamilies(id1).at(0);
-    QFont AR(family1);
+    int id = QFontDatabase::addApplicationFont(":/resource/fonts/AR.otf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont AR(family);
 
     this->setFont(AR);
     m_currencyFrom->setFont(AR);
@@ -111,6 +109,7 @@ void Converter::initStyle()
     m_currencyFrom->setCursor(Qt::PointingHandCursor);
     m_currencyTo->setCursor(Qt::PointingHandCursor);
 
+    this->setWindowTitle("Converter");
     this->setWindowIcon((QIcon(":/resource/icons/iconApplication.png")));
     m_swapCurrencyButton->setIcon((QIcon(":/resource/icons/swapButton.png")));
     m_swapCurrencyButton->setStyleSheet("border: none;");
