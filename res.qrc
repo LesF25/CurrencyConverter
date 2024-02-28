@@ -1,9 +1,9 @@
 <RCC>
     <qresource prefix="/resource">
-        <file>fonts/AR.otf</file>
-        <file>fonts/SR.ttf</file>
         <file>icons/iconApplication.png</file>
         <file>icons/swapButton.png</file>
         <file>icons/swapButtonW.png</file>
+        <file>fonts/GSL.ttf</file>
+        <file>fonts/RL.ttf</file>
     </qresource>
 </RCC>

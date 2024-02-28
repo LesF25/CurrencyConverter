@@ -27,7 +27,7 @@ Converter::Converter(QWidget *parent)
 {
     mainLayout = new QVBoxLayout;
     this->setLayout(mainLayout);
-    this->setFixedSize(QSize(280, 135));
+    this->setFixedSize(QSize(300, 155));
 
 //=====================Summary Layout=========================
     QHBoxLayout* sumLayout = new QHBoxLayout;
@@ -42,6 +42,7 @@ Converter::Converter(QWidget *parent)
 //=====================Currency Layout=========================
     QHBoxLayout* currencyLayout = new QHBoxLayout;
     QLabel* currencyLabelFrom = new QLabel("Convert currency", this);
+    QSpacerItem* spacerCurrency = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_swapCurrencyButton = new QPushButton(this);
     m_currencyFrom = new QComboBox(this);
     m_currencyTo = new QComboBox(this);
@@ -54,6 +55,7 @@ Converter::Converter(QWidget *parent)
     }
 
     currencyLayout->addWidget(currencyLabelFrom);
+    currencyLayout->addItem(spacerCurrency);
     currencyLayout->addWidget(m_currencyFrom);
     currencyLayout->addWidget(m_swapCurrencyButton);
     currencyLayout->addWidget(m_currencyTo);
@@ -71,11 +73,9 @@ Converter::Converter(QWidget *parent)
 //======================Convert Layout==========================
     QHBoxLayout* convertLayout = new QHBoxLayout;
     m_calculateButton = new QPushButton("Calculate", this);
-//    m_clearButton = new QPushButton("Clear", this);
-    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSpacerItem* spacerConvert = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    convertLayout->addItem(spacer);
-//    convertLayout->addWidget(m_clearButton);
+    convertLayout->addItem(spacerConvert);
     convertLayout->addWidget(m_calculateButton);
 //==============================================================
     QFrame* line = new QFrame(this);
@@ -96,13 +96,23 @@ Converter::Converter(QWidget *parent)
 
 void Converter::initStyle()
 {
-    int id = QFontDatabase::addApplicationFont(":/resource/fonts/AR.otf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont AR(family);
+    int idGSL = QFontDatabase::addApplicationFont(":/resource/fonts/GSL.ttf");
+    QString familyGSL = QFontDatabase::applicationFontFamilies(idGSL).at(0);
+    QFont GSL(familyGSL);
 
-    this->setFont(AR);
-    m_currencyFrom->setFont(AR);
-    m_currencyTo->setFont(AR);
+    int idRL = QFontDatabase::addApplicationFont(":/resource/fonts/RL.ttf");
+    QString familyRL = QFontDatabase::applicationFontFamilies(idRL).at(0);
+    QFont SR(familyRL);
+
+    GSL.setBold(true);
+    GSL.setPointSize(11);
+    this->setFont(GSL);
+    GSL.setPointSize(10);
+    m_currencyFrom->setFont(GSL);
+    m_currencyTo->setFont(GSL);
+
+    m_resultEdit->setFont(SR);
+    m_sumEdit->setFont(SR);
 
     m_calculateButton->setCursor(Qt::PointingHandCursor);
     m_swapCurrencyButton->setCursor(Qt::PointingHandCursor);
@@ -163,14 +173,13 @@ void Converter::initStyle()
         "border: none; "
         "border-radius: 2px; "
         "padding: 3px;"
-        "font-weight: 700;"
         );
 
     m_calculateButton->setStyleSheet(
         "background-color: #ECECEC;"
         "color: #000;"
         "border-radius: 10px; "
-        "padding: 5px;"
+        "padding: 3px;"
         );
 }
 
@@ -219,7 +228,12 @@ void Converter::parseData()
         QString currencyStr = m_currencyTo->currentText();
         QJsonObject currency = data[currencyStr].toObject();
 
-        QString result = QString::number(currency["value"].toDouble() * m_sumEdit->text().toDouble());
+        QString valueSum = m_sumEdit->text();
+        for (int i = 0; i < valueSum.length(); i++)
+            if (valueSum[i] == ',')
+                valueSum[i] = '.';
+
+        QString result = QString::number(currency["value"].toDouble() * valueSum.toDouble());
         m_resultEdit->setText(result);
     }
     else if (m_reply->error() != QNetworkReply::OperationCanceledError)
