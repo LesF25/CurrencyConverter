@@ -25,73 +25,73 @@ namespace API
 Converter::Converter(QWidget *parent)
     : QWidget(parent)
 {
-    mainLayout = new QVBoxLayout;
-    this->setLayout(mainLayout);
+    _ltMain = new QVBoxLayout;
+    this->setLayout(_ltMain);
     this->setFixedSize(QSize(300, 155));
 
 //=====================Summary Layout=========================
     QHBoxLayout* sumLayout = new QHBoxLayout;
     QLabel* sumLabel = new QLabel("Sum", this);
-    m_sumEdit = new QLineEdit("", this);
-    m_sumEdit->setFixedWidth(150);
-    m_sumEdit->setValidator(new QDoubleValidator);
+    _edSum = new QLineEdit("", this);
+    _edSum->setFixedWidth(150);
+    _edSum->setValidator(new QDoubleValidator);
 
     sumLayout->addWidget(sumLabel);
-    sumLayout->addWidget(m_sumEdit);
+    sumLayout->addWidget(_edSum);
 
 //=====================Currency Layout=========================
     QHBoxLayout* currencyLayout = new QHBoxLayout;
     QLabel* currencyLabelFrom = new QLabel("Convert currency", this);
     QSpacerItem* spacerCurrency = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_swapCurrencyButton = new QPushButton(this);
-    m_currencyFrom = new QComboBox(this);
-    m_currencyTo = new QComboBox(this);
+    _btSwapCurrency = new QPushButton(this);
+    _cboxCurrencyFrom = new QComboBox(this);
+    _cboxCurrencyTo = new QComboBox(this);
 
     QVector<QString> currencyVec = {"RUB", "USD", "EUR", "CNY"};
     for(const auto& cur : currencyVec)
     {
-        m_currencyFrom->addItem(cur);
-        m_currencyTo->addItem(cur);
+        _cboxCurrencyFrom->addItem(cur);
+        _cboxCurrencyTo->addItem(cur);
     }
 
     currencyLayout->addWidget(currencyLabelFrom);
     currencyLayout->addItem(spacerCurrency);
-    currencyLayout->addWidget(m_currencyFrom);
-    currencyLayout->addWidget(m_swapCurrencyButton);
-    currencyLayout->addWidget(m_currencyTo);
+    currencyLayout->addWidget(_cboxCurrencyFrom);
+    currencyLayout->addWidget(_btSwapCurrency);
+    currencyLayout->addWidget(_cboxCurrencyTo);
 
 //======================Result Layout==========================
     QHBoxLayout* resultLayout = new QHBoxLayout;
     QLabel* resultLabel = new QLabel("Result", this);
-    m_resultEdit = new QLineEdit(this);
-    m_resultEdit->setReadOnly(true);
-    m_resultEdit->setFixedWidth(150);
+    _edResult = new QLineEdit(this);
+    _edResult->setReadOnly(true);
+    _edResult->setFixedWidth(150);
 
     resultLayout->addWidget(resultLabel);
-    resultLayout->addWidget(m_resultEdit);
+    resultLayout->addWidget(_edResult);
 
 //======================Convert Layout==========================
     QHBoxLayout* convertLayout = new QHBoxLayout;
-    m_calculateButton = new QPushButton("Calculate", this);
+    _btCalculate = new QPushButton("Calculate", this);
     QSpacerItem* spacerConvert = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     convertLayout->addItem(spacerConvert);
-    convertLayout->addWidget(m_calculateButton);
+    convertLayout->addWidget(_btCalculate);
 //==============================================================
     QFrame* line = new QFrame(this);
     line->setFrameShape(QFrame::HLine);
 
-    mainLayout->addLayout(sumLayout);
-    mainLayout->addLayout(currencyLayout);
-    mainLayout->addLayout(resultLayout);
-    mainLayout->addWidget(line);
-    mainLayout->addLayout(convertLayout);
+    _ltMain->addLayout(sumLayout);
+    _ltMain->addLayout(currencyLayout);
+    _ltMain->addLayout(resultLayout);
+    _ltMain->addWidget(line);
+    _ltMain->addLayout(convertLayout);
 
     initStyle();
 
 //========================= Connect =============================
-    connect(m_swapCurrencyButton, SIGNAL(clicked()), this, SLOT(swapCurrency()));
-    connect(m_calculateButton, SIGNAL(clicked()), this, SLOT(searchCurrency()));
+    connect(_btSwapCurrency, SIGNAL(clicked()), this, SLOT(swapCurrency()));
+    connect(_btCalculate, SIGNAL(clicked()), this, SLOT(searchCurrency()));
 }
 
 void Converter::initStyle()
@@ -108,28 +108,28 @@ void Converter::initStyle()
     GSL.setPointSize(11);
     this->setFont(GSL);
     GSL.setPointSize(10);
-    m_currencyFrom->setFont(GSL);
-    m_currencyTo->setFont(GSL);
+    _cboxCurrencyFrom->setFont(GSL);
+    _cboxCurrencyTo->setFont(GSL);
 
-    m_resultEdit->setFont(SR);
-    m_sumEdit->setFont(SR);
+    _edResult->setFont(SR);
+    _edSum->setFont(SR);
 
-    m_calculateButton->setCursor(Qt::PointingHandCursor);
-    m_swapCurrencyButton->setCursor(Qt::PointingHandCursor);
-    m_currencyFrom->setCursor(Qt::PointingHandCursor);
-    m_currencyTo->setCursor(Qt::PointingHandCursor);
+    _btCalculate->setCursor(Qt::PointingHandCursor);
+    _btSwapCurrency->setCursor(Qt::PointingHandCursor);
+    _cboxCurrencyFrom->setCursor(Qt::PointingHandCursor);
+    _cboxCurrencyTo->setCursor(Qt::PointingHandCursor);
 
     this->setWindowTitle("Converter");
     this->setWindowIcon((QIcon(":/resource/icons/iconApplication.png")));
-    m_swapCurrencyButton->setIcon((QIcon(":/resource/icons/swapButton.png")));
-    m_swapCurrencyButton->setStyleSheet("border: none;");
+    _btSwapCurrency->setIcon((QIcon(":/resource/icons/swapButton.png")));
+    _btSwapCurrency->setStyleSheet("border: none;");
 
     this->setStyleSheet(
         "background-color: #fff;"
         "color: #000;"
     );
 
-    m_currencyFrom->setStyleSheet(
+    _cboxCurrencyFrom->setStyleSheet(
         "QComboBox"
         "{"
         "background-color: #ECECEC;"
@@ -144,7 +144,7 @@ void Converter::initStyle()
         "}"
         );
 
-    m_currencyTo->setStyleSheet(
+    _cboxCurrencyTo->setStyleSheet(
         "QComboBox"
         "{"
         "background-color: #ECECEC;"
@@ -159,7 +159,7 @@ void Converter::initStyle()
         "}"
     );
 
-    m_resultEdit->setStyleSheet(
+    _edResult->setStyleSheet(
         "background-color: #ECECEC;"
         "color: #000;"
         "border: none; "
@@ -167,7 +167,7 @@ void Converter::initStyle()
         "padding: 3px;"
         );
 
-    m_sumEdit->setStyleSheet(
+    _edSum->setStyleSheet(
         "background-color: #ECECEC;"
         "color: #000;"
         "border: none; "
@@ -175,7 +175,7 @@ void Converter::initStyle()
         "padding: 3px;"
         );
 
-    m_calculateButton->setStyleSheet(
+    _btCalculate->setStyleSheet(
         "background-color: #ECECEC;"
         "color: #000;"
         "border-radius: 10px; "
@@ -185,64 +185,64 @@ void Converter::initStyle()
 
 void Converter::swapCurrency()
 {
-    int indexCurrency = m_currencyFrom->currentIndex();
-    m_currencyFrom->setCurrentIndex(m_currencyTo->currentIndex());
-    m_currencyTo->setCurrentIndex(indexCurrency);
+    int indexCurrency = _cboxCurrencyFrom->currentIndex();
+    _cboxCurrencyFrom->setCurrentIndex(_cboxCurrencyTo->currentIndex());
+    _cboxCurrencyTo->setCurrentIndex(indexCurrency);
 }
 
 void Converter::searchCurrency()
 {
-    if (!(m_resultEdit->displayText().isEmpty()))
-        m_resultEdit->setText("");
+    if (!(_edResult->displayText().isEmpty()))
+        _edResult->setText("");
 
-    if (m_sumEdit->displayText().isEmpty())
+    if (_edSum->displayText().isEmpty())
     {
         QMessageBox::warning(this, "Warning", "The amount of currency has not been entered.");
         return;
     }
 
-    if (m_reply)
+    if (_reply)
     {
-        m_reply->abort();
-        m_reply->deleteLater();
-        m_reply = nullptr;
+        _reply->abort();
+        _reply->deleteLater();
+        _reply = nullptr;
     }
 
     QUrlQuery query;
     query.addQueryItem("apikey", API::apikey);
-    query.addQueryItem("currencies", m_currencyTo->currentText());
-    query.addQueryItem("base_currency", m_currencyFrom->currentText());
+    query.addQueryItem("currencies", _cboxCurrencyTo->currentText());
+    query.addQueryItem("base_currency", _cboxCurrencyFrom->currentText());
 
-    m_reply = m_networkManager.get(QNetworkRequest(API::url + "?" + query.toString()));
-    connect(m_reply, SIGNAL(finished()), this, SLOT(parseData()));
+    _reply = _networkManager.get(QNetworkRequest(API::url + "?" + query.toString()));
+    connect(_reply, SIGNAL(finished()), this, SLOT(parseData()));
 }
 
 void Converter::parseData()
 {
-    if (m_reply->error() == QNetworkReply::NoError)
+    if (_reply->error() == QNetworkReply::NoError)
     {
-        QByteArray dataArray = m_reply->readAll();
+        QByteArray dataArray = _reply->readAll();
         QJsonDocument jsonDocument = QJsonDocument::fromJson(dataArray);
         QJsonObject data = jsonDocument["data"].toObject();
 
-        QString currencyStr = m_currencyTo->currentText();
+        QString currencyStr = _cboxCurrencyTo->currentText();
         QJsonObject currency = data[currencyStr].toObject();
 
-        QString valueSum = m_sumEdit->text();
+        QString valueSum = _edSum->text();
         for (int i = 0; i < valueSum.length(); i++)
             if (valueSum[i] == ',')
                 valueSum[i] = '.';
 
         QString result = QString::number(currency["value"].toDouble() * valueSum.toDouble());
-        m_resultEdit->setText(result);
+        _edResult->setText(result);
     }
-    else if (m_reply->error() != QNetworkReply::OperationCanceledError)
+    else if (_reply->error() != QNetworkReply::OperationCanceledError)
     {
-        qCritical() << "Reply failed, error:" << m_reply->errorString();
+        qCritical() << "Reply failed, error:" << _reply->errorString();
     }
 
-    m_reply->deleteLater();
-    m_reply = nullptr;
+    _reply->deleteLater();
+    _reply = nullptr;
 }
 
 Converter::~Converter()

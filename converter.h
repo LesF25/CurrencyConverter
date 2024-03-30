@@ -20,17 +20,16 @@ public:
     ~Converter();
 
 private:
-    QLineEdit* m_sumEdit;
-    QLineEdit* m_resultEdit;
-    QComboBox* m_currencyFrom;
-    QComboBox* m_currencyTo;
-    QPushButton* m_calculateButton;
-//    QPushButton* m_clearButton;
-    QPushButton* m_swapCurrencyButton;
-    QVBoxLayout* mainLayout;
+    QLineEdit* _edSum;
+    QLineEdit* _edResult;
+    QComboBox* _cboxCurrencyFrom;
+    QComboBox* _cboxCurrencyTo;
+    QPushButton* _btCalculate;
+    QPushButton* _btSwapCurrency;
+    QVBoxLayout* _ltMain;
 
-    QNetworkAccessManager m_networkManager;
-    QNetworkReply* m_reply = nullptr;
+    QNetworkAccessManager _networkManager;
+    QNetworkReply* _reply = nullptr;
 
 private slots:
     void parseData();
